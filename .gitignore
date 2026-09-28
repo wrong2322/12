@@ -35,3 +35,25 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# === 三方校验设备：隐私隔离（严禁入库） ===
+private/
+**/private/
+*.docx
+*.xlsx
+!samples/**/*.csv
+!samples/**/*.json
+.env
+.env.*
+!.env.example
+secrets/
+raw_data/
+exports/
+*.pem
+*.key
+credentials.json
+verify-device/outputs/
+verify-device/.venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
