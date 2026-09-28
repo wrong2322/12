@@ -1,55 +1,46 @@
-# 三方数据校验设备（多模型统筹）
+# TVD-300 取水计量多方现场校验终端（实物设备）
 
-本地优先的取水计量 **许可 / 监测 / 直报 / 税费** 交叉校验编排器。  
-默认使用 `local_rules`，**数据不外发**；真实材料放在仓库外的 `private/`（已 gitignore）。
+本目录交付的是 **可研制的现场器物方案**：加固箱式校验终端 + 边缘固件，不是网页系统。
 
-## 快速开始
+申报/真实台账仍只放本机 `private/`（gitignore），不入库。
+
+## 先看这里
+
+| 文档 | 内容 |
+|------|------|
+| [`hardware/PRODUCT.md`](hardware/PRODUCT.md) | 产品定义、与市面便携超声/RTU/信号源仪的差异 |
+| [`hardware/bom/BOM_TVD300A.md`](hardware/bom/BOM_TVD300A.md) | 样机物料与费用量级 |
+| [`hardware/mechanical/structure.md`](hardware/mechanical/structure.md) | 箱体分区与探头夹具 |
+| [`hardware/electrical/architecture.md`](hardware/electrical/architecture.md) | 电气架构与同步采样 |
+| [`hardware/patent/landscape_and_claims.md`](hardware/patent/landscape_and_claims.md) | 专利规避与可申请点 |
+| [`hardware/prototype/build_plan.md`](hardware/prototype/build_plan.md) | 从黑盒联调→工程样机路线 |
+| [`hardware/field_ops/SOP_field.md`](hardware/field_ops/SOP_field.md) | 现场操作指导书 |
+| [`hardware/drawings/`](hardware/drawings/) | 爆炸/面板/电气示意图（SVG） |
+| [`materials/PLAYBOOK.md`](materials/PLAYBOOK.md) | 器物级流程套路 |
+
+## 设备做什么
+
+1. **标准通道**：外夹时差超声，对比在用取水流量计  
+2. **被检直采**：RS485 / 脉冲 / 4–20mA，核验“有监测≠监测可用”的链路  
+3. **多方对齐**：许可 / 直报 / 税费摘要在机内对账（默认偏差阈 5%）  
+4. **断面定位**：GNSS 核对是否法定取水口附近装表  
+5. **边缘多模型**：规则优先 + 本地五角色编排，出销号建议与证据包  
+6. **当场出单**：热敏打印 + 加密 U 盘导出（蜂窝默认物理关断）
+
+## 边缘软件（装进箱子，不是网站）
+
+`src/` 下的规则引擎与多模型编排，是主机内 `rule_engine` / `model_orchestrator` 的算法原型，可在无网环境跑通对账逻辑：
 
 ```bash
 cd verify-device
-python -m venv .venv
-source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python src/cli.py samples/households_demo.json
+python -m pytest tests -q
 ```
 
-查看：`outputs/` 单户结果、`outputs/batch_summary.json`、`outputs/audit.jsonl`。
-
-## 流程套路（五段流水线）
-
-```
-抽取 extractor → 对账 reconciler（规则）→ 分类 classifier
-        → 派单 dispatcher → 审核 auditor → 销号/退回
-```
-
-硬规则见 `config/thresholds.yaml`（默认相对偏差 5%、强制违规码不可被模型覆盖）。
-
-## 内容材料索引
-
-| 类型 | 路径 |
-|------|------|
-| 总规程 | `materials/sops/01_master_process.md` |
-| 公共供水闭合 | `materials/sops/02_public_supply_closure.md` |
-| 规上协同销号 | `materials/sops/03_self_supply_collaborative_closure.md` |
-| 核算-公报衔接 | `materials/sops/04_accounting_bulletin_link.md` |
-| 对账/转供/证据表单 | `materials/forms/` |
-| 检查清单 | `materials/checklists/` |
-| 工单模板 | `materials/work_orders/` |
-| 角色提示词 | `prompts/*.md` |
-| 脱敏样例 | `samples/households_demo.json` |
-
-## 切换真实模型（可选）
-
-1. 复制 `.env.example` → `.env`（勿提交）。  
-2. `config/models.yaml` 将对应 role 的 `provider` 改为 `openai_compatible`。  
-3. 保持 `send_raw_records: false`。
+正式机载 UI 为本地触控向导，见 `hardware/firmware/architecture.md`。
 
 ## 隐私
 
-详见 [PRIVACY.md](./PRIVACY.md)。原稿、真实台账、导出包 **禁止 push**。
-
-## 测试
-
-```bash
-cd verify-device && python -m pytest tests -q
-```
+见 [`PRIVACY.md`](PRIVACY.md)。原稿、实流原始波形、税务原文禁止入库与默认上云。
