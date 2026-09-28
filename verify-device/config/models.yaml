@@ -1,0 +1,70 @@
+# 多模型统筹路由：按角色分配模型，可替换为真实 endpoint
+version: "1.0"
+
+# 默认提供方：local_rules = 本地规则+模板推理（无外网、无密钥，适合离线演示）
+# 可切换：openai_compatible（需设置环境变量 VERIFY_API_KEY / VERIFY_BASE_URL）
+default_provider: local_rules
+
+providers:
+  local_rules:
+    type: local_rules
+    description: 本地确定性规则 + 提示词模板拼装，不外发数据
+
+  openai_compatible:
+    type: openai_compatible
+    base_url_env: VERIFY_BASE_URL
+    api_key_env: VERIFY_API_KEY
+    default_model: gpt-4o-mini
+    timeout_seconds: 60
+    # 隐私：默认禁止把原始台账全文发给云端；仅发送结构化摘要
+    send_raw_records: false
+
+# 五角色流水线 — 统筹调用
+roles:
+  extractor:
+    purpose: 从异构台账/报表抽取统一字段
+    provider: local_rules
+    model: extractor-v1
+    temperature: 0.0
+    max_tokens: 2048
+
+  reconciler:
+    purpose: 许可/监测/直报/税费四方对账与偏差计算
+    provider: local_rules
+    model: reconciler-v1
+    temperature: 0.0
+    max_tokens: 2048
+
+  classifier:
+    purpose: 异常原因分类与严重度判定
+    provider: local_rules
+    model: classifier-v1
+    temperature: 0.1
+    max_tokens: 1024
+
+  dispatcher:
+    purpose: 工单派发、主办单位与时限建议
+    provider: local_rules
+    model: dispatcher-v1
+    temperature: 0.1
+    max_tokens: 1024
+
+  auditor:
+    purpose: 销号材料完整性审核（闭环出口）
+    provider: local_rules
+    model: auditor-v1
+    temperature: 0.0
+    max_tokens: 1024
+
+# 编排策略
+orchestration:
+  # 硬规则先于模型；模型不得覆盖 mandatory_violation
+  rules_first: true
+  # 分类与派单不一致时，升级人工复核
+  escalate_on_role_conflict: true
+  # 并行：抽取可按户并行；对账后串行分类→派单→审核
+  parallel_extract: true
+  # 结果落盘目录（相对 verify-device/）
+  output_dir: outputs
+  # 审计留痕：全程写入 JSONL，便于县级牵头、市级抽查
+  audit_log: outputs/audit.jsonl
