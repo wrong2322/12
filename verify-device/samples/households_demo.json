@@ -1,0 +1,161 @@
+[
+  {
+    "household_key": "DEMO-PS-001",
+    "county": "样例县A",
+    "use_type": "public_supply",
+    "permit": {
+      "permit_id": "P-A-1001",
+      "intake_code": "INT-A-001",
+      "holder_name": "样例供水公司城区分公司",
+      "use_type": "public_supply",
+      "annual_quota_m3": 12000000,
+      "valid_from": "2024-01-01",
+      "valid_to": "2029-12-31",
+      "status": "active",
+      "county": "样例县A"
+    },
+    "monitor": {
+      "intake_code": "INT-A-001",
+      "period": "2025-Q4",
+      "volume_m3": 980000,
+      "signal_type": "digital",
+      "online_rate_pct": 98.5,
+      "flags": []
+    },
+    "direct_report": {
+      "stat_roster_id": "ST-A-001",
+      "intake_code": "INT-A-001",
+      "period": "2025-Q4",
+      "volume_m3": 910000,
+      "reporter": "样例供水公司"
+    },
+    "tax": {
+      "tax_period": "2025-Q4",
+      "intake_code": "INT-A-001",
+      "taxable_volume_m3": 915000,
+      "taxpayer": "样例供水公司"
+    },
+    "transfer_in_m3": 50000,
+    "transfer_out_m3": 120000,
+    "meter_at_legal_section": false,
+    "notes": ["合成样例：装表后置 + 转供不平衡 + 直报偏低"]
+  },
+  {
+    "household_key": "DEMO-SS-002",
+    "county": "样例县B",
+    "use_type": "self_supply",
+    "permit": {
+      "permit_id": "P-B-2002",
+      "intake_code": "INT-B-002",
+      "holder_name": "样例工业有限公司",
+      "use_type": "self_supply",
+      "annual_quota_m3": 200000,
+      "valid_from": "2023-01-01",
+      "valid_to": "2025-06-30",
+      "status": "expired",
+      "county": "样例县B"
+    },
+    "monitor": {
+      "intake_code": "INT-B-002",
+      "period": "2025-Q4",
+      "volume_m3": 1200,
+      "corrected_volume_m3": 18500,
+      "signal_type": "analog",
+      "online_rate_pct": 72.0,
+      "flags": ["jump", "spike"]
+    },
+    "direct_report": {
+      "stat_roster_id": "ST-B-002",
+      "intake_code": "INT-B-002",
+      "period": "2025-Q4",
+      "volume_m3": 4477.5,
+      "reporter": "样例工业有限公司"
+    },
+    "tax": {
+      "tax_period": "2025-Q4",
+      "intake_code": "INT-B-002",
+      "taxable_volume_m3": 4500,
+      "taxpayer": "样例工业有限公司"
+    },
+    "meter_at_legal_section": true,
+    "notes": ["合成样例：证照失效 + 跳表修正数量级 + 直报与监测偏差大"]
+  },
+  {
+    "household_key": "DEMO-SS-003",
+    "county": "样例县B",
+    "use_type": "self_supply",
+    "permit": {
+      "permit_id": "P-B-2003",
+      "intake_code": "INT-B-003",
+      "holder_name": "样例食品厂",
+      "use_type": "self_supply",
+      "annual_quota_m3": 360000,
+      "valid_from": "2024-01-01",
+      "valid_to": "2029-12-31",
+      "status": "active",
+      "county": "样例县B"
+    },
+    "monitor": {
+      "intake_code": "INT-B-003",
+      "period": "2025-Q4",
+      "volume_m3": 29800,
+      "signal_type": "digital",
+      "online_rate_pct": 99.2,
+      "flags": []
+    },
+    "direct_report": {
+      "stat_roster_id": "ST-B-003",
+      "intake_code": "INT-B-003",
+      "period": "2025-Q4",
+      "volume_m3": 30100,
+      "reporter": "样例食品厂"
+    },
+    "tax": {
+      "tax_period": "2025-Q4",
+      "intake_code": "INT-B-003",
+      "taxable_volume_m3": 30050,
+      "taxpayer": "样例食品厂"
+    },
+    "meter_at_legal_section": true,
+    "notes": ["合成样例：四方基本一致，应通过"]
+  },
+  {
+    "household_key": "DEMO-SS-004",
+    "county": "样例县C",
+    "use_type": "self_supply",
+    "permit": {
+      "permit_id": "P-C-3004",
+      "intake_code": "INT-C-004",
+      "holder_name": "样例化工厂",
+      "use_type": "self_supply",
+      "annual_quota_m3": 80000,
+      "valid_from": "2024-01-01",
+      "valid_to": "2028-12-31",
+      "status": "active",
+      "county": "样例县C"
+    },
+    "monitor": {
+      "intake_code": "INT-C-004",
+      "period": "2025-Q4",
+      "volume_m3": 9200,
+      "signal_type": "digital",
+      "online_rate_pct": 88.0,
+      "flags": ["offline"]
+    },
+    "direct_report": {
+      "stat_roster_id": "ST-C-004",
+      "intake_code": "INT-C-009",
+      "period": "2025-Q4",
+      "volume_m3": 7100,
+      "reporter": "样例化工厂"
+    },
+    "tax": {
+      "tax_period": "2025-Q4",
+      "intake_code": "INT-C-004",
+      "taxable_volume_m3": 7050,
+      "taxpayer": "样例化工厂"
+    },
+    "meter_at_legal_section": true,
+    "notes": ["合成样例：编码不一致 + 离线 + 偏差超5%"]
+  }
+]

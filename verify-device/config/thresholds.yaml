@@ -1,0 +1,36 @@
+# 硬规则阈值（不依赖模型，确定性执行）
+version: "1.0"
+
+# 直报 vs 监测/税费：相对偏差超过该值触发工单
+relative_deviation_pct: 5.0
+
+# 公共供水县域闭合：相对偏差超过审核阈值触发季度复核
+public_supply_balance_pct: 5.0
+
+# 监测修正前后相差数量级（10倍）视为严重异常
+monitor_correction_order_of_magnitude: 10.0
+
+# 工单办结目标（管理指标，用于审计模型评估）
+work_order_close_rate_target_pct: 90.0
+
+# 周期对齐容差（天）：抄表/监测累计/税期不完全一致时的缓冲
+period_align_tolerance_days: 7
+
+# 违规线索类型（命中即强制派单，不可被模型“放过”）
+mandatory_violation_codes:
+  - OVER_PERMIT_METER      # 计量超许可
+  - OVER_PERMIT_STAT       # 统计超许可
+  - PERMIT_EXPIRED         # 证照失效仍取水
+  - OVER_CONTROL_INDEX     # 超管控指标
+  - SOURCE_METER_MISPLACE  # 取水口装表位置不合规
+  - TRANSFER_IMBALANCE     # 转供不平衡
+
+# 销号出口（模型只能在清单内选择）
+closure_exits:
+  - CORRECT_DIRECT_REPORT      # 更正直报
+  - REQUEST_TAX_REVIEW         # 提请税务复核税基
+  - ADJUST_PERMIT_OR_PLAN      # 调整许可/计划用水
+  - FIX_METER_OR_SIGNAL        # 整改装表/信号
+  - UPDATE_TRANSFER_RELATION   # 完善转供关系
+  - MARK_OUTAGE_OR_MAINT       # 标记检修停运
+  - ARCHIVE_EXPLAIN_ONLY       # 仅留痕说明（需市级抽查）
