@@ -57,3 +57,7 @@ verify-device/.venv/
 **/__pycache__/
 *.pyc
 .pytest_cache/
+
+# allow packaged deliverables for download
+!downloads/
+!downloads/**
